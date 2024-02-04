@@ -64,7 +64,9 @@ class ChessEngine:
 
 
 if __name__ == "__main__":
-    board_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    board_fen = input("Enter a FEN string or press enter for the default position: ")
+    if board_fen == "":
+        board_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     engine = ChessEngine(stockfish_path="stockfish/stockfish-windows-x86-64-avx2.exe", board_fen=board_fen)
     if engine.board is not None:
         user_side = input("Choose your side (white/black): ")
