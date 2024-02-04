@@ -28,10 +28,12 @@ class ChessEngine:
 
     def make_move(self):
         if self.board is not None:
+            self.stockfish.set_fen_position(self.board.fen())
             current_move = self.stockfish.get_best_move()
             print(f'Bot has chosen: {current_move}')
             print('Bot is making move')
             self.board.push_san(current_move)
+            self.stockfish.set_fen_position(self.board.fen())
             self.print_board()
         else:
             print('Cannot make move: Invalid board')
@@ -40,6 +42,7 @@ class ChessEngine:
         if self.board is not None:
             try:
                 self.board.push_san(move)
+                self.stockfish.set_fen_position(self.board.fen())
                 print(f'User has made move: {move}')
                 self.print_board()
             except:
@@ -48,16 +51,7 @@ class ChessEngine:
             print('Cannot make move: Invalid board')
 
     def print_board(self):
-        print('  a b c d e f g h')
-        print(' -----------------')
-        for i in range(8):
-            print(f'{8-i}|', end='')
-            for j in range(8):
-                piece = self.board.piece_at(chess.square(j, 7 - i))
-                print(f'{piece if piece is not None else "."} ', end='')
-            print('|')
-        print(' -----------------')
-        print('  a b c d e f g h')
+        print(self.stockfish.get_board_visual())
 
 
 if __name__ == "__main__":
