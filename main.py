@@ -7,6 +7,7 @@ class ChessEngine:
         self.stockfish = self._initialize_stockfish(stockfish_path)
         if self.is_fen_valid(board_fen):
             self.board = chess.Board(board_fen)
+            self.stockfish.set_fen_position(self.board.fen())
         else:
             print('Invalid FEN')
             self.board = None
