@@ -29,17 +29,43 @@ class ChessEngine:
     def make_move(self):
         if self.board is not None:
             current_move = self.stockfish.get_best_move()
-            print(f'I have chosen: {current_move}')
-            print('Doing move')
+            print(f'Bot has chosen: {current_move}')
+            print('Bot is making move')
             self.board.push_san(current_move)
-            print(self.board)
+            self.print_board()
         else:
             print('Cannot make move: Invalid board')
+
+    def user_move(self, move):
+        if self.board is not None:
+            try:
+                self.board.push_san(move)
+                print(f'User has made move: {move}')
+                self.print_board()
+            except:
+                print('Invalid move')
+        else:
+            print('Cannot make move: Invalid board')
+
+    def print_board(self):
+        print('  a b c d e f g h')
+        print(' -----------------')
+        for i in range(8):
+            print(f'{8-i}|', end='')
+            for j in range(8):
+                piece = self.board.piece_at(chess.square(j, 7 - i))
+                print(f'{piece if piece is not None else "."} ', end='')
+            print('|')
+        print(' -----------------')
+        print('  a b c d e f g h')
 
 
 if __name__ == "__main__":
     board_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     engine = ChessEngine(stockfish_path="stockfish/stockfish-windows-x86-64-avx2.exe", board_fen=board_fen)
     if engine.board is not None:
-        print(engine.board)
-        engine.make_move()
+        engine.print_board()
+        while not engine.board.is_checkmate():
+            engine.make_move()
+            user_move = input("Enter your move: ")
+            engine.user_move(user_move)
