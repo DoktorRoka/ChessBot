@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+
 # Define a function to convert the board state to FEN
 def board_to_fen(board):
     empty = 0
@@ -21,7 +22,9 @@ def board_to_fen(board):
         empty = 0
     return fen
 
+
 def detect_pieces(board, pieces, color):
+    detections = []
     for piece_name, piece in pieces.items():
         img_piece_clr = cv2.imread(piece, cv2.IMREAD_UNCHANGED)
         img_piece_clr_readable = cv2.cvtColor(img_piece_clr, cv2.COLOR_BGR2GRAY)
@@ -30,15 +33,21 @@ def detect_pieces(board, pieces, color):
         threshold = 0.8
         loc = np.where(res >= threshold)
         for pt in zip(*loc[::-1]):
-            cv2.rectangle(board, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
-            # Update the board state
-            row = pt[1] // h
-            col = pt[0] // w
-            if row < 8 and col < 8:
-                if color == 'white':
-                    board_state[row][col] = piece_name[0].upper()
-                else:
-                    board_state[row][col] = piece_name[0].lower()
+            detections.append((pt, piece_name, h, w))
+
+    # Sort detections by y-coordinate
+    detections.sort(key=lambda x: x[0][1])
+
+    for pt, piece_name, h, w in detections:
+        cv2.rectangle(board, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+        # Update the board state
+        row = pt[1] // h
+        col = pt[0] // w
+        if row < 8 and col < 8:
+            if color == 'white':
+                board_state[row][col] = piece_name[0].upper()
+            else:
+                board_state[row][col] = piece_name[0].lower()
     return board
 
 
