@@ -1,27 +1,49 @@
 import cv2
 import numpy as np
 
+# Define a function to convert the board state to FEN
+def board_to_fen(board):
+    empty = 0
+    fen = ''
+    for i in range(8):
+        for j in range(8):
+            if board[i][j] is None:
+                empty += 1
+            else:
+                if empty > 0:
+                    fen += str(empty)
+                    empty = 0
+                fen += board[i][j]
+        if empty > 0:
+            fen += str(empty)
+        if i < 7:
+            fen += '/'
+        empty = 0
+    return fen
 
-def detect_pieces(board, pieces):
-    for piece in pieces:
+def detect_pieces(board, pieces, color):
+    for piece_name, piece in pieces.items():
         img_piece_clr = cv2.imread(piece, cv2.IMREAD_UNCHANGED)
-
         img_piece_clr_readable = cv2.cvtColor(img_piece_clr, cv2.COLOR_BGR2GRAY)
-
         h, w = img_piece_clr_readable.shape
-
         res = cv2.matchTemplate(img_board_readable, img_piece_clr_readable, cv2.TM_CCOEFF_NORMED)
         threshold = 0.8
         loc = np.where(res >= threshold)
-
         for pt in zip(*loc[::-1]):
             cv2.rectangle(board, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
-
+            # Update the board state
+            row = pt[1] // h
+            col = pt[0] // w
+            if row < 8 and col < 8:
+                if color == 'white':
+                    board_state[row][col] = piece_name[0].upper()
+                else:
+                    board_state[row][col] = piece_name[0].lower()
     return board
 
 
 # load board and piece images
-img_board = cv2.imread('train_data/set_1.png')
+img_board = cv2.imread('train_data/checker.png')
 img_board_readable = cv2.cvtColor(img_board, cv2.COLOR_BGR2GRAY)
 
 pieces_white = {
@@ -42,7 +64,14 @@ pieces_black = {
     'Knight': 'train_data/usual_chess/black_knight.png'
 }
 
-img_board = detect_pieces(img_board, pieces_white.values())
-img_board = detect_pieces(img_board, pieces_black.values())
+# Initialize an 8x8 board with None
+board_state = [[None for _ in range(8)] for _ in range(8)]
+
+img_board = detect_pieces(img_board, pieces_white, 'white')
+img_board = detect_pieces(img_board, pieces_black, 'black')
+
+# Convert the board state to FEN
+fen = board_to_fen(board_state)
+print(fen)
 
 cv2.imwrite('res.png', img_board)
