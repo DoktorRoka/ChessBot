@@ -60,22 +60,26 @@ def detect_pieces(board, pieces, color):
 img_board = cv2.imread('train_data/checker.png')
 img_board_readable = cv2.cvtColor(img_board, cv2.COLOR_BGR2GRAY)
 
+
+chess_pack = 'usual_chess'
+
+
 pieces_white = {
-    'Pawn': 'train_data/usual_chess/white_pawn.png',
-    'King': 'train_data/usual_chess/white_king.png',
-    'Queen': 'train_data/usual_chess/white_queen.png',
-    'Rook': 'train_data/usual_chess/white_rook.png',
-    'Bishop': 'train_data/usual_chess/white_bishop.png',
-    'Night': 'train_data/usual_chess/white_knight.png'
+    'Pawn': f'train_data/{chess_pack}/white_pawn.png',
+    'King': f'train_data/{chess_pack}/white_king.png',
+    'Queen': f'train_data/{chess_pack}/white_queen.png',
+    'Rook': f'train_data/{chess_pack}/white_rook.png',
+    'Bishop': f'train_data/{chess_pack}/white_bishop.png',
+    'Night': f'train_data/{chess_pack}/white_knight.png'
 }
 
 pieces_black = {
-    'Pawn': 'train_data/usual_chess/black_pawn.png',
-    'King': 'train_data/usual_chess/black_king.png',
-    'Queen': 'train_data/usual_chess/black_queen.png',
-    'Rook': 'train_data/usual_chess/black_rook.png',
-    'Bishop': 'train_data/usual_chess/black_bishop.png',
-    'Night': 'train_data/usual_chess/black_knight.png'
+    'Pawn': f'train_data/{chess_pack}/black_pawn.png',
+    'King': f'train_data/{chess_pack}/black_king.png',
+    'Queen': f'train_data/{chess_pack}/black_queen.png',
+    'Rook': f'train_data/{chess_pack}/black_rook.png',
+    'Bishop': f'train_data/{chess_pack}/black_bishop.png',
+    'Night': f'train_data/{chess_pack}/black_knight.png'
 }
 
 # Initialize an 8x8 board with None
