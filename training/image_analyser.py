@@ -3,7 +3,9 @@ import numpy as np
 
 
 # Define a function to convert the board state to FEN
-def board_to_fen(board):
+def board_to_fen(board, active_color='w', castling='-',
+                 en_passant_target='-',
+                 halfmove_clock='0', fullmove_number='1'):
     empty = 0
     fen = ''
     for i in range(8):
@@ -17,9 +19,12 @@ def board_to_fen(board):
                 fen += board[i][j]
         if empty > 0:
             fen += str(empty)
-        if i < 7:
+        if i < 8:
             fen += '/'
         empty = 0
+
+    # Append the additional FEN fields
+    fen += f' {active_color} {castling} {en_passant_target} {halfmove_clock} {fullmove_number}'
     return fen
 
 
