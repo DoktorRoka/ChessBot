@@ -61,7 +61,7 @@ pieces_white = {
     'Queen': 'train_data/usual_chess/white_queen.png',
     'Rook': 'train_data/usual_chess/white_rook.png',
     'Bishop': 'train_data/usual_chess/white_bishop.png',
-    'Knight': 'train_data/usual_chess/white_knight.png'
+    'Night': 'train_data/usual_chess/white_knight.png'
 }
 
 pieces_black = {
@@ -70,7 +70,7 @@ pieces_black = {
     'Queen': 'train_data/usual_chess/black_queen.png',
     'Rook': 'train_data/usual_chess/black_rook.png',
     'Bishop': 'train_data/usual_chess/black_bishop.png',
-    'Knight': 'train_data/usual_chess/black_knight.png'
+    'Night': 'train_data/usual_chess/black_knight.png'
 }
 
 # Initialize an 8x8 board with None
