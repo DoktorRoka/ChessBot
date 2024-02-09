@@ -1,13 +1,11 @@
-# TODO: I REALLY SHOULD JUST TRAIN MY MODEL IF I WANT IT TO DETECT PIECES FROM OTHER SKIN PACKS.
-
 import cv2
 import numpy as np
 
 # loading pics of board and pieces.
 # TODO: make it better
-img_board = cv2.imread('../train_data/pic_2.png')
-img_piece_pawn_white = cv2.imread('../train_data/white_pawn.png', cv2.IMREAD_UNCHANGED)
-img_piece_pawn_black = cv2.imread('../train_data/black_pawn.png', cv2.IMREAD_UNCHANGED)
+img_board = cv2.imread('train_data/set_1.png')
+img_piece_pawn_white = cv2.imread('train_data/white_pawn.png', cv2.IMREAD_UNCHANGED)
+img_piece_pawn_black = cv2.imread('train_data/black_pawn.png', cv2.IMREAD_UNCHANGED)
 
 # making it gray scale, probably not needed because they have solid color. Need to change
 img_board_readable = cv2.cvtColor(img_board, cv2.COLOR_BGR2GRAY)
