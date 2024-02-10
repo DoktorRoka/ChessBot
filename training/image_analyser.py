@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 
 
-# Define a function to convert the board state to FEN
 def board_to_fen(board, active_color='w', castling='-',
                  en_passant_target='-',
                  halfmove_clock='0', fullmove_number='1'):
@@ -19,11 +18,10 @@ def board_to_fen(board, active_color='w', castling='-',
                 fen += board[i][j]
         if empty > 0:
             fen += str(empty)
-        if i < 8:
+        if i < 7:  # not seven because makes FEN break
             fen += '/'
         empty = 0
 
-    # Append the additional FEN fields
     fen += f' {active_color} {castling} {en_passant_target} {halfmove_clock} {fullmove_number}'
     return fen
 
@@ -56,13 +54,25 @@ def detect_pieces(board, pieces, color):
     return board
 
 
-# load board and piece images
+# Load the image
 img_board = cv2.imread('train_data/checker.png')
+
 img_board_readable = cv2.cvtColor(img_board, cv2.COLOR_BGR2GRAY)
 
+chessboard_dims = (8, 8)
+
+# I can't believe that CV2 has a built-in function for it...
+ret, corners = cv2.findChessboardCorners(img_board_readable, chessboard_dims, None)
+
+if ret:
+    # If found, draw corners
+    cv2.drawChessboardCorners(img_board, chessboard_dims, corners, ret)
+    cv2.imshow('Chessboard', img_board)
+    cv2.waitKey(0)
+else:
+    print("Chessboard not found")
 
 chess_pack = 'usual_chess'
-
 
 pieces_white = {
     'Pawn': f'train_data/{chess_pack}/white_pawn.png',
@@ -82,13 +92,12 @@ pieces_black = {
     'Night': f'train_data/{chess_pack}/black_knight.png'
 }
 
-# Initialize an 8x8 board with None
+# Board that keeps the current state of board
 board_state = [[None for _ in range(8)] for _ in range(8)]
 
 img_board = detect_pieces(img_board, pieces_white, 'white')
 img_board = detect_pieces(img_board, pieces_black, 'black')
 
-# Convert the board state to FEN
 fen = board_to_fen(board_state)
 print(fen)
 
