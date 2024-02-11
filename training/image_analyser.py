@@ -18,7 +18,7 @@ def board_to_fen(board, active_color='w', castling='-',
                 fen += board[i][j]
         if empty > 0:
             fen += str(empty)
-        if i < 7:  # not seven because makes FEN break
+        if i < 7:  # not eight because makes FEN break
             fen += '/'
         empty = 0
 
