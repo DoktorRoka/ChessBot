@@ -3,7 +3,7 @@ from stockfish import Stockfish
 
 
 class ChessEngine:
-    def __init__(self, stockfish_path, board_fen):
+    def __init__(self, stockfish_path, board_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
         self.stockfish = self._initialize_stockfish(stockfish_path)
         if self.is_fen_valid(board_fen):
             self.board = chess.Board(board_fen)
@@ -59,6 +59,15 @@ class ChessEngine:
                 print('Invalid move')
         else:
             print('Cannot make move: Invalid board')
+
+    def get_best_move(self, fen):
+        if self.is_fen_valid(fen):
+            self.stockfish.set_fen_position(fen)
+            best_move = self.stockfish.get_best_move()
+            return best_move
+        else:
+            print('Invalid fen')
+            return None
 
     def print_board(self):
         print(self.stockfish.get_board_visual())

@@ -105,7 +105,8 @@ def start_detection(filepath=None, unflip=False, active='w'):
 
     print("---\nPredicted FEN:\n%s %s - - 0 1" % (short_fen, active))
     print("Final Certainty: %.1f%%" % (certainty * 100))
-    return short_fen + active
+    result = str(short_fen + " " + active + " - - 0 1")
+    return result
 
 
 if __name__ == '__main__':
