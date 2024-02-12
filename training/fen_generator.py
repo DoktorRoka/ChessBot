@@ -25,7 +25,7 @@ def load_graph(frozen_graph_filepath):
 class ChessboardPredictor(object):
     """ChessboardPredictor using saved model"""
 
-    def __init__(self, frozen_graph_path='model/best.pb'):
+    def __init__(self, frozen_graph_path='training/model/best.pb'):
         # Restore model using a frozen graph.
         print("\t Loading model '%s'" % frozen_graph_path)
         graph = load_graph(frozen_graph_path)
@@ -74,9 +74,9 @@ class ChessboardPredictor(object):
 def start_detection(filepath=None, unflip=False, active='w'):
     # Load image from filepath
     # global img
-    if filepath:
+
         # Load image from file
-        img = helper_image_loading.loadImageFromPath(filepath)
+    img = helper_image_loading.loadImageFromPath(filepath)
 
     # Look for chessboard in image, get corners and split chessboard into tiles
     tiles, corners = chessboard_finder.findGrayscaleTilesInImage(img)
@@ -105,6 +105,7 @@ def start_detection(filepath=None, unflip=False, active='w'):
 
     print("---\nPredicted FEN:\n%s %s - - 0 1" % (short_fen, active))
     print("Final Certainty: %.1f%%" % (certainty * 100))
+    return short_fen + active
 
 
 if __name__ == '__main__':
