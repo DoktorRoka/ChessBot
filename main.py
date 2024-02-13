@@ -1,7 +1,9 @@
 import sys
 sys.path.append("./training")
+
 from training.fen_generator import *
 from stockfish_init import ChessEngine
+
 import pyautogui
 import time
 
@@ -18,9 +20,10 @@ bottom_right_x, bottom_right_y = 1303, 964
 square_size = (bottom_right_x - top_left_x) / 8
 
 while True:
-    # Take a screenshot of the chessboard
+
     screenshot = pyautogui.screenshot(region=(top_left_x, top_left_y, bottom_right_x - top_left_x, bottom_right_y - top_left_y))
     screenshot.save("training/screenshot.png")
+    # Call start_detection with the screenshot file
     new_fen = start_detection(filepath="training/screenshot.png")
     if previous_fen != new_fen:  # detects changed.
         # TODO: make it to move only after one detection (to prevent CPU overload by stockfish)
