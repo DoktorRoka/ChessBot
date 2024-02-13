@@ -187,7 +187,6 @@ def findChessboardCorners(img_arr_gray, noise_threshold=8000):
             if best_score is None or score > best_score:
                 best_score = score
                 final_corners = sub_corners + [corners[0], corners[1], corners[0], corners[1]]
-
     return final_corners
 
 
@@ -314,7 +313,6 @@ def getTiles(processed_gray_img):
         for file in range(8):  # columns (letters)
             tiles[:, :, (rank * 8 + file)] = \
                 processed_gray_img[(7 - rank) * 32:((7 - rank) + 1) * 32, file * 32:(file + 1) * 32]
-
     return tiles
 
 
