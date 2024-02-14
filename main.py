@@ -14,8 +14,9 @@ previous_fen = None
 current_player = 'w'
 
 # Define the coordinates of the chessboard's top-left and bottom-right corners
-top_left_x, top_left_y = 324, 135
-bottom_right_x, bottom_right_y = 1135, 947
+top_left_x, top_left_y = 325, 158
+bottom_right_x, bottom_right_y = 1135, 969  # make sure that you pick the right corners
+# TODO: make it automatically finds corners
 
 # top_left_x, top_left_y = 557, 220
 # bottom_right_x, bottom_right_y = 1303, 964  # lichess
@@ -30,22 +31,30 @@ while True:
     screenshot.save("training/screenshot.png")
     # Call start_detection with the screenshot file
     new_fen = start_detection(filepath="training/screenshot.png")
+
     if previous_fen != new_fen:  # detects changed.
-        # TODO: make it to move only after one detection (to prevent CPU overload by stockfish)
         print("The FEN has changed.")
-        best_move = engine.get_best_move(new_fen)
-        print(best_move)
+        if current_player == 'w':
+            best_move = engine.get_best_move(new_fen)
+            print(best_move)
 
-        # Convert the move to screen coordinates (do not change numbers, they are working for every chessboard)
-        start_square, end_square = best_move[:2], best_move[2:]
-        start_x, start_y = top_left_x + square_size * (
-                    ord(start_square[0]) - ord('a')) + square_size / 2, top_left_y + square_size * (
-                                       8 - int(start_square[1])) + square_size / 2
-        end_x, end_y = top_left_x + square_size * (
-                    ord(end_square[0]) - ord('a')) + square_size / 2, top_left_y + square_size * (
-                                   8 - int(end_square[1])) + square_size / 2
+            # Convert the move to screen coordinates (do not change numbers, they are working for every chessboard)
+            start_square, end_square = best_move[:2], best_move[2:]
+            start_x, start_y = top_left_x + square_size * (
+                        ord(start_square[0]) - ord('a')) + square_size / 2, top_left_y + square_size * (
+                                           8 - int(start_square[1])) + square_size / 2
+            end_x, end_y = top_left_x + square_size * (
+                        ord(end_square[0]) - ord('a')) + square_size / 2, top_left_y + square_size * (
+                                       8 - int(end_square[1])) + square_size / 2
 
-        pyautogui.moveTo(start_x, start_y)
-        pyautogui.dragTo(end_x, end_y, button='left')
+            pyautogui.moveTo(start_x, start_y)
+            pyautogui.dragTo(end_x, end_y, button='left')
+            current_player = 'b'
+        elif current_player == 'b':
+            if previous_fen == new_fen:
+                continue
+            else:
+                current_player = 'w'
+
         previous_fen = new_fen
-    time.sleep(5)
+    time.sleep(0.1)
