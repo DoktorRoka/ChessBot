@@ -23,7 +23,7 @@ engine = ChessEngine("./stockfish/stockfish-windows-x86-64-avx2.exe")
 previous_fen = None
 current_player = 'w'
 
-player_side = 'b'
+player_side = str(input('Enter your side: '))
 
 # Define the coordinates of the chessboard's top-left and bottom-right corners
 # top_left_x, top_left_y = 325, 158
@@ -53,14 +53,14 @@ while True:
 
             # Convert the move to screen coordinates (do not change numbers, they are working for every chessboard)
             start_square, end_square = best_move[:2], best_move[2:]
-            if player_side == 'w':
+            if player_side == 'w':  # the numbers below for white side. DO NOT CHANGE
                 start_x, start_y = top_left_x + square_size * (
                         ord(start_square[0]) - ord('a')) + square_size / 2, top_left_y + square_size * (
                                            8 - int(start_square[1])) + square_size / 2
                 end_x, end_y = top_left_x + square_size * (
                         ord(end_square[0]) - ord('a')) + square_size / 2, top_left_y + square_size * (
                                        8 - int(end_square[1])) + square_size / 2
-            else:
+            else:  # the numbers below for black side. DO NOT CHANGE
                 start_x, start_y = top_left_x + square_size * (
                         7 - (ord(start_square[0]) - ord('a'))) + square_size / 2, top_left_y + square_size * (
                                            int(start_square[1]) - 1) + square_size / 2
