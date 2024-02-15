@@ -1,5 +1,6 @@
 import numpy as np
-
+import win32api
+import time
 import PIL.Image
 
 
@@ -78,7 +79,7 @@ def lengthenFEN(fen):
 
 def unflipFEN(fen):
     if len(fen) < 71:
-        fen = lengthenFEN(FEN)
+        fen = lengthenFEN(fen)
     return '/'.join([r[::-1] for r in fen.split('/')][::-1])
 
 
@@ -128,3 +129,23 @@ def loadImages(image_filepaths):
         img = PIL.Image.open(image_filepath)
         training_data[i, :, :, 0] = np.asarray(img, dtype=np.uint8)
     return training_data
+
+def get_mouse_coords():
+    key_to_click = 0x01  # left mouse button
+    state_left = win32api.GetKeyState(key_to_click)
+    click_count = 0
+    xpos1, ypos1, xpos2, ypos2 = None, None, None, None
+
+    while True:
+        a = win32api.GetKeyState(key_to_click)
+        if a != state_left:
+            state_left = a
+            if a < 0:
+                click_count += 1
+                if click_count == 1:
+                    xpos1, ypos1 = win32api.GetCursorPos()
+                elif click_count == 2:
+                    xpos2, ypos2 = win32api.GetCursorPos()
+                    return xpos1, ypos1, xpos2, ypos2
+
+        time.sleep(0.001)

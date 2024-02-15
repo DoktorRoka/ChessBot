@@ -4,18 +4,10 @@ sys.path.append("./training")
 
 from training.fen_generator import *
 from stockfish_init import ChessEngine
-
+from training.helper_functions import get_mouse_coords
 import pyautogui
 import time
 
-
-def normalize_fen(fen):
-    fen_parts = fen.split(' ')
-    rows = fen_parts[0].split('/')
-    normalized_rows = [row[::-1] for row in rows[::-1]]
-    normalized_fen_parts = ["/".join(normalized_rows)]
-    normalized_fen_parts.extend(fen_parts[1:])
-    return " ".join(normalized_fen_parts)
 
 
 engine = ChessEngine("./stockfish/stockfish-windows-x86-64-avx2.exe")
@@ -25,13 +17,15 @@ current_player = 'w'
 
 player_side = str(input('Enter your side: '))
 
-# Define the coordinates of the chessboard's top-left and bottom-right corners
-# top_left_x, top_left_y = 325, 158
-# bottom_right_x, bottom_right_y = 1135, 969  # make sure that you pick the right corners
-# TODO: make it automatically finds corners
+get_corners = False
 
-top_left_x, top_left_y = 557, 220
-bottom_right_x, bottom_right_y = 1303, 964  # lichess
+
+if get_corners:
+    print("Click on borders of chessboard (top right, bottom left")
+    top_left_x, top_left_y, bottom_right_x, bottom_right_y = get_mouse_coords()
+else:
+    top_left_x, top_left_y = 509, 219
+    bottom_right_x, bottom_right_y = 1349, 1061  # lichess if drag to maximum
 
 # Define the size of a square on the chessboard
 square_size = (bottom_right_x - top_left_x) / 8
@@ -42,13 +36,17 @@ while True:
         region=(top_left_x, top_left_y, bottom_right_x - top_left_x, bottom_right_y - top_left_y))
     screenshot.save("training/screenshot.png")
     # Call start_detection with the screenshot file
-    new_fen = start_detection(filepath="training/screenshot.png", active=player_side)
     if player_side == 'b':
-        new_fen = normalize_fen(new_fen)
+        new_fen, certainty = start_detection(filepath="training/screenshot.png", active=player_side, unflip=True)
+    else:
+        new_fen, certainty = start_detection(filepath="training/screenshot.png", active=player_side, unflip=False)
     if previous_fen != new_fen:  # detects changed.
         print("The FEN has changed.")
         if current_player == 'w':
             best_move = engine.get_best_move(new_fen)
+            if best_move is None:
+                print('Best move is none, rescanning...')
+                continue
             print(best_move)
 
             # Convert the move to screen coordinates (do not change numbers, they are working for every chessboard)
