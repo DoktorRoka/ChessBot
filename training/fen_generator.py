@@ -105,9 +105,10 @@ def start_detection(filepath=None, unflip=False, active='w'):
     print("Certainty range [%g - %g], Avg: %g" % (
         tile_certainties.min(), tile_certainties.max(), tile_certainties.mean()))
 
-    print("---\nPredicted FEN:\n%s %s - - 0 1" % (short_fen, active))
+
+    print("---\nPredicted FEN:\n%s" % short_fen)
     print("Final Certainty: %.1f%%" % (certainty * 100))
-    result = str(short_fen + " " + active + " - - 0 1")
+    result = str(short_fen)
     return result, certainty
 
 
