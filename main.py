@@ -13,7 +13,7 @@ import time
 engine = ChessEngine("./stockfish/stockfish-windows-x86-64-avx2.exe")
 
 previous_fen = None
-current_player = 'w'
+current_player = 'us'
 
 player_side = str(input('Enter your side: '))
 
@@ -21,7 +21,7 @@ get_corners = False
 
 
 if get_corners:
-    print("Click on borders of chessboard (top right, bottom left")
+    print("Click on borders of chessboard (top left, bottom right")
     top_left_x, top_left_y, bottom_right_x, bottom_right_y = get_mouse_coords()
 else:
     top_left_x, top_left_y = 509, 219
@@ -42,7 +42,8 @@ while True:
         new_fen, certainty = start_detection(filepath="training/screenshot.png", active=player_side, unflip=False)
     if previous_fen != new_fen:  # detects changed.
         print("The FEN has changed.")
-        if current_player == 'w':
+
+        if current_player == 'us':
             best_move = engine.get_best_move(new_fen)
             if best_move is None:
                 print('Best move is none, rescanning...')
@@ -68,12 +69,14 @@ while True:
 
             pyautogui.moveTo(start_x, start_y)
             pyautogui.dragTo(end_x, end_y, button='left')
-            current_player = 'b'
-        elif current_player == 'b':
+            current_player = 'them'
+        elif current_player == 'them':
             if previous_fen == new_fen:
                 continue
             else:
-                current_player = 'w'
+                current_player = 'us'
 
         previous_fen = new_fen
     time.sleep(0.1)  # do not make it any smaller. ITS A MINIMUM
+
+# TODO: clean code to make more readable. OOP!!!
