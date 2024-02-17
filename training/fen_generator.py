@@ -3,7 +3,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # '0' for INFO and WARNING messages, '
 import tensorflow as tf
 tf.get_logger().setLevel('ERROR') # Only show error messages
 import numpy as np
-from helper_functions import shortenFEN, unflipFEN
+from helper_functions import shortenFEN, unflipFEN, can_castle
 import helper_image_loading
 import chessboard_finder
 
@@ -25,8 +25,8 @@ def load_graph(frozen_graph_filepath):
 class ChessboardPredictor(object):
     """ChessboardPredictor using saved model"""
 
-    # def __init__(self, frozen_graph_path='model/best.pb'):
-    def __init__(self, frozen_graph_path='./training/model/best.pb'):
+    # def __init__(self, frozen_graph_path='model/best.pb'):  # uncomment this one to run __name__
+    def __init__(self, frozen_graph_path='./training/model/best.pb'):  # comment this one to run __name__
 
         # Restore model using a frozen graph.
         print("\t Loading model '%s'" % frozen_graph_path)
@@ -73,7 +73,7 @@ class ChessboardPredictor(object):
 ###########################################################
 # MAIN CLI
 
-def start_detection(filepath=None, unflip=False, active='w'):
+def start_detection(filepath=None, unflip=False, active='w', castling_prediction=True):
     # Load image from filepath
     # global img
 
@@ -105,6 +105,12 @@ def start_detection(filepath=None, unflip=False, active='w'):
     print("Certainty range [%g - %g], Avg: %g" % (
         tile_certainties.min(), tile_certainties.max(), tile_certainties.mean()))
 
+    if castling_prediction:
+        castling_rights = can_castle(short_fen)
+    else:
+        castling_rights = "-"
+
+    short_fen += ' ' + active + ' ' + castling_rights + ' - 0 1'
 
     print("---\nPredicted FEN:\n%s" % short_fen)
     print("Final Certainty: %.1f%%" % (certainty * 100))
@@ -113,4 +119,4 @@ def start_detection(filepath=None, unflip=False, active='w'):
 
 
 if __name__ == '__main__':
-    start_detection(filepath="./train_data/checker.png")
+    start_detection(filepath="./train_data/checker.png", castling_prediction=False)

@@ -149,3 +149,25 @@ def get_mouse_coords():
                     return xpos1, ypos1, xpos2, ypos2
 
         time.sleep(0.001)
+
+
+def can_castle(fen):
+    fen_parts = fen.split('/')
+
+    rook_positions = fen_parts[-1]
+
+    castling = ''
+
+    if rook_positions.startswith('R'):  # I am not sure that this thing prioritizes castling at queen side
+        castling += 'Q'
+
+    if rook_positions.endswith('R'):
+        castling += 'K'
+
+    rook_positions = fen_parts[0]
+    if rook_positions.startswith('r'):
+        castling += 'q'
+    if rook_positions.endswith('r'):
+        castling += 'k'
+
+    return castling
