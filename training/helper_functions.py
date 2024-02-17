@@ -170,4 +170,7 @@ def can_castle(fen):
     if rook_positions.endswith('r'):
         castling += 'k'
 
+    if castling == '':
+        castling = '-'
+
     return castling
