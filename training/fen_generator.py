@@ -73,7 +73,8 @@ class ChessboardPredictor(object):
 ###########################################################
 # MAIN CLI
 
-def start_detection(filepath=None, unflip=False, active='w', castling_prediction=True):
+
+def start_detection(predictor, filepath=None, unflip=False, active='w', castling_prediction=True):
     # Load image from filepath
     # global img
 
@@ -91,9 +92,9 @@ def start_detection(filepath=None, unflip=False, active='w', castling_prediction
         print("\n--- Prediction on file %s ---" % filepath)
 
     # Initialize predictor, takes a while, but only needed once
-    predictor = ChessboardPredictor()
+    # predictor = ChessboardPredictor()
     fen, tile_certainties = predictor.getPrediction(tiles)
-    predictor.close()
+    # predictor.close()
     if unflip:
         fen = unflipFEN(fen)
     short_fen = shortenFEN(fen)
@@ -115,8 +116,10 @@ def start_detection(filepath=None, unflip=False, active='w', castling_prediction
     print("---\nPredicted FEN:\n%s" % short_fen)
     print("Final Certainty: %.1f%%" % (certainty * 100))
     result = str(short_fen)
+    certainty = round(certainty * 100, 1)  # preparing certainty for a returning result
     return result, certainty
 
 
 if __name__ == '__main__':
-    start_detection(filepath="./train_data/checker.png", castling_prediction=False)
+    predictor = ChessboardPredictor()
+    result, certainty = start_detection(predictor=predictor, filepath="./train_data/checker.png", castling_prediction=False)

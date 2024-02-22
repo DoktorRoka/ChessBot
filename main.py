@@ -30,18 +30,24 @@ else:
 # Define the size of a square on the chessboard
 square_size = (bottom_right_x - top_left_x) / 8
 
+predictor = ChessboardPredictor()
+
+tolerance = 0.1  # an analogue to the sanity check
+
 while True:
 
     screenshot = pyautogui.screenshot(
         region=(top_left_x, top_left_y, bottom_right_x - top_left_x, bottom_right_y - top_left_y))
     screenshot.save("training/screenshot.png")
     # Call start_detection with the screenshot file
-    if player_side == 'b':
-        new_fen, certainty = start_detection(filepath="training/screenshot.png", active=player_side, unflip=True)
-    else:
-        new_fen, certainty = start_detection(filepath="training/screenshot.png", active=player_side, unflip=False)
-    if previous_fen != new_fen:  # detects changed.
-        print("The FEN has changed.")
+    certainty = 0
+    while abs(certainty - 100.0):
+        if player_side == 'b':
+            new_fen, certainty = start_detection(predictor=predictor, filepath="training/screenshot.png", active=player_side, unflip=True)
+        else:
+            new_fen, certainty = start_detection(predictor=predictor, filepath="training/screenshot.png", active=player_side, unflip=False)
+        if previous_fen != new_fen:  # detects changed.
+            print("The FEN has changed.")
 
         if current_player == 'us':
             best_move = engine.get_best_move(new_fen)
@@ -77,6 +83,8 @@ while True:
                 current_player = 'us'
 
         previous_fen = new_fen
-    time.sleep(0.1)  # do not make it any smaller. ITS A MINIMUM
+    time.sleep(3)  # do not make it any smaller. ITS A MINIMUM
+
+predictor.close()
 
 # TODO: clean code to make more readable. OOP!!!
