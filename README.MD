@@ -3,6 +3,8 @@
 This bot uses image prediction and mathematical equations to interpret the state of a chess game. It then passes this 
 information to Stockfish, to determine the best moves.
 
+Short video showcase: https://youtu.be/8K0O75Rlnnk
+
 # Source code installation:
 1) Clone the project into your directory.
 2) Create virtual environment and activate it
