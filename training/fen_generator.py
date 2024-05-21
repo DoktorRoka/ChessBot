@@ -73,12 +73,8 @@ class ChessboardPredictor(object):
 ###########################################################
 # MAIN CLI
 
-
 def start_detection(predictor, filepath=None, unflip=False, active='w', castling_prediction=True):
     # Load image from filepath
-    # global img
-
-        # Load image from file
     img = helper_image_loading.loadImageFromPath(filepath)
 
     # Look for chessboard in image, get corners and split chessboard into tiles
@@ -91,18 +87,15 @@ def start_detection(predictor, filepath=None, unflip=False, active='w', castling
     if filepath:
         print("\n--- Prediction on file %s ---" % filepath)
 
-    # Initialize predictor, takes a while, but only needed once
-    # predictor = ChessboardPredictor()
     fen, tile_certainties = predictor.getPrediction(tiles)
-    # predictor.close()
     if unflip:
         fen = unflipFEN(fen)
     short_fen = shortenFEN(fen)
     # Use the worst case certainty as our final uncertainty score
     certainty = tile_certainties.min()
 
-    print('Per-tile certainty:')
-    print(tile_certainties)
+    # print('Per-tile certainty:')
+    # print(tile_certainties)
     print("Certainty range [%g - %g], Avg: %g" % (
         tile_certainties.min(), tile_certainties.max(), tile_certainties.mean()))
 
@@ -116,10 +109,12 @@ def start_detection(predictor, filepath=None, unflip=False, active='w', castling
     print("---\nPredicted FEN:\n%s" % short_fen)
     print("Final Certainty: %.1f%%" % (certainty * 100))
     result = str(short_fen)
-    certainty = round(certainty * 100, 1)  # preparing certainty for a returning result
     return result, certainty
 
 
 if __name__ == '__main__':
     predictor = ChessboardPredictor()
-    result, certainty = start_detection(predictor=predictor, filepath="./train_data/checker.png", castling_prediction=False)
+    try:
+        start_detection(predictor, filepath="./train_data/checker.png", castling_prediction=False)
+    finally:
+        predictor.close()
