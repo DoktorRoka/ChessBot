@@ -12,7 +12,7 @@ information to Stockfish, to determine the best moves.
   ```python misc/download_stockfish.py```
 5) Run ```main.py``` and follow the instructions it gives
 
-The ```stockfish_init.py file``` contains necessary functions and settings for interacting with the Stockfish engine.
+The ```stockfish_init.py``` file contains necessary functions and settings for interacting with the Stockfish engine.
 You can use it to play chess against Stockfish by entering moves via the keyboard (e.g., ```e2e4```).
 
 # Installation with gui:
