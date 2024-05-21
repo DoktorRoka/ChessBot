@@ -3,6 +3,8 @@
 This bot uses image prediction and mathematical equations to interpret the state of a chess game. It then passes this 
 information to Stockfish, to determine the best moves.
 
+Short video showcase: https://youtu.be/8K0O75Rlnnk
+
 # Source code installation:
 1) Clone the project into your directory.
 2) Create virtual environment and activate it
@@ -12,7 +14,7 @@ information to Stockfish, to determine the best moves.
   ```python misc/download_stockfish.py```
 5) Run ```main.py``` and follow the instructions it gives
 
-The ```stockfish_init.py file``` contains necessary functions and settings for interacting with the Stockfish engine.
+The ```stockfish_init.py``` file contains necessary functions and settings for interacting with the Stockfish engine.
 You can use it to play chess against Stockfish by entering moves via the keyboard (e.g., ```e2e4```).
 
 # Installation with gui:
