@@ -1,4 +1,6 @@
 # Python chess bot
+I recommend to switch [ModelTraining branch](https://github.com/DoktorRoka/ChessBot/tree/ModelTraining),
+because it contains more instructions and actually shows how model works.
 
 This bot uses image prediction and mathematical equations to interpret the state of a chess game. It then passes this 
 information to Stockfish, to determine the best moves.
