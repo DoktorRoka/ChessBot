@@ -25,8 +25,8 @@ def load_graph(frozen_graph_filepath):
 class ChessboardPredictor(object):
     """ChessboardPredictor using saved model"""
 
-    # def __init__(self, frozen_graph_path='model/best.pb'):  # uncomment this one to run __name__
-    def __init__(self, frozen_graph_path='./training/model/best.pb'):  # comment this one to run __name__
+    def __init__(self, frozen_graph_path='model/best.pb'):  # uncomment this one to run __name__
+    # def __init__(self, frozen_graph_path='./training/model/best.pb'):  # comment this one to run __name__
 
         # Restore model using a frozen graph.
         print("\t Loading model '%s'" % frozen_graph_path)
