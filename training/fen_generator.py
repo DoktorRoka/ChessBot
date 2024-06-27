@@ -115,6 +115,6 @@ def start_detection(predictor, filepath=None, unflip=False, active='w', castling
 if __name__ == '__main__':
     predictor = ChessboardPredictor()
     try:
-        start_detection(predictor, filepath="./train_data/checker.png", castling_prediction=False)
+        start_detection(predictor, filepath="./train_data/checker.png", castling_prediction=True)
     finally:
         predictor.close()
