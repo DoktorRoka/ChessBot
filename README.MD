@@ -19,9 +19,7 @@ Short video showcase: https://youtu.be/8K0O75Rlnnk
 The ```stockfish_init.py``` file contains necessary functions and settings for interacting with the Stockfish engine.
 You can use it to play chess against Stockfish by entering moves via the keyboard (e.g., ```e2e4```).
 
-# Installation with gui:
-Details on how to install the GUI version of this project will be provided soon.
 
 # How to train your own model and how I trained mine:
-Instructions on how to train your own model, as well as details on how I trained mine, will be provided in a separate 
-branch. Please stay tuned for updates. I plan to upload this information after finishing school in a week.
+Guide how model works and how to train your own model contained here: 
+https://github.com/DoktorRoka/ChessBot/tree/ModelTraining
