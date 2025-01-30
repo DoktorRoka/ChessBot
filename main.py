@@ -66,31 +66,55 @@ def suppress_opencv_decorator(func):
 
 @suppress_opencv_decorator
 def draw_arrow(start, end):
-    """Draw semi-transparent arrow directly on screen using screen coordinates"""
-    try:
-        screen = pyautogui.screenshot()
-        img = cv2.cvtColor(np.array(screen), cv2.COLOR_RGB2BGRA)  # Add alpha channel
-        overlay = img.copy()
+    """Draw semi-transparent arrow directly on screen that disappears on click"""
+    import tkinter as tk
+    from tkinter import Canvas
 
-        start = tuple(map(int, start))
-        end = tuple(map(int, end))
+    # Convert coordinates to integers
+    start = tuple(map(int, start))
+    end = tuple(map(int, end))
 
-        cv2.arrowedLine(overlay, start, end, (0, 255, 0, 128), 8,
-                       tipLength=0.3, line_type=cv2.LINE_AA)
+    # Create transparent overlay window
+    root = tk.Tk()
+    root.attributes('-fullscreen', True)
+    root.attributes('-topmost', True)
+    root.attributes('-transparentcolor', 'black')  # Use black as transparent color
+    root.overrideredirect(True)
+    root.config(bg='black')
 
-        alpha = 0.5
-        mask = overlay[:,:,3] > 0  # Where we drew
-        img[mask] = cv2.addWeighted(overlay, alpha, img, 1-alpha, 0)[mask]
+    # Create canvas for drawing
+    canvas = Canvas(root, bg='black', highlightthickness=0)
+    canvas.pack(fill=tk.BOTH, expand=True)
 
-        # Create transparent window
-        cv2.namedWindow("chess_arrow", cv2.WINDOW_GUI_NORMAL)
-        cv2.setWindowProperty("chess_arrow", cv2.WND_PROP_TOPMOST, 1)
-        cv2.setWindowProperty("chess_arrow", cv2.WND_PROP_FULLSCREEN, 1)
-        cv2.imshow("chess_arrow", cv2.cvtColor(img, cv2.COLOR_BGRA2BGR))
-        cv2.waitKey(800)
+    # Draw arrow with transparency (RGBA -> converted to TK color)
+    arrow_color = '#7CFC00'  # Base green color
+    arrow_alpha = 0.6  # 60% opacity
 
-    finally:
-        cv2.destroyAllWindows()
+    # Calculate coordinates
+    x1, y1 = start
+    x2, y2 = end
+
+    # Create arrow with tkinter's built-in arrow
+    canvas.create_line(
+        x1, y1, x2, y2,
+        # fill=arrow_color + format(int(255 * arrow_alpha), '02x'),
+        fill=arrow_color,
+        width=8,
+        arrow=tk.LAST,
+        arrowshape=(15, 15, 5)
+    )
+
+    # Close window on any mouse click
+    def close_window(event):
+        root.destroy()
+
+    canvas.bind('<ButtonPress>', close_window)
+
+    # Auto-close after 10 seconds if not clicked
+    root.after(10000, root.destroy)
+
+    # Start the event loop
+    root.mainloop()
 
 
 def handle_instruct_mode():
