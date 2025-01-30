@@ -4,7 +4,7 @@ import pyautogui
 import keyboard
 import cv2
 import numpy as np
-
+from functools import wraps
 sys.path.append("./training")
 
 from training.fen_generator import start_detection, ChessboardPredictor
@@ -53,22 +53,42 @@ def calculate_coordinates(move, player_side):
 
     return (start_x, start_y), (end_x, end_y)
 
+def suppress_opencv_decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Hide cv2 warnings
+        debug = cv2.getLogLevel()
+        cv2.setLogLevel(1)  # Disable all logging
+        result = func(*args, **kwargs)
+        cv2.setLogLevel(debug)
+        return result
+    return wrapper
 
+@suppress_opencv_decorator
 def draw_arrow(start, end):
-    """Draw semi-transparent arrow that auto-closes properly"""
+    """Draw semi-transparent arrow directly on screen using screen coordinates"""
     try:
         screen = pyautogui.screenshot()
-        img = cv2.cvtColor(np.array(screen), cv2.COLOR_RGB2BGR)
+        img = cv2.cvtColor(np.array(screen), cv2.COLOR_RGB2BGRA)  # Add alpha channel
         overlay = img.copy()
 
-        cv2.arrowedLine(overlay,
-                        tuple(map(int, start)),
-                        tuple(map(int, end)),
-                        (0, 255, 0), 5, tipLength=0.3)
+        start = tuple(map(int, start))
+        end = tuple(map(int, end))
 
-        cv2.addWeighted(overlay, 0.5, img, 0.5, 0, img)
-        cv2.imshow("Move Suggestion", img)
-        cv2.waitKey(800)  # Reduced display time
+        cv2.arrowedLine(overlay, start, end, (0, 255, 0, 128), 8,
+                       tipLength=0.3, line_type=cv2.LINE_AA)
+
+        alpha = 0.5
+        mask = overlay[:,:,3] > 0  # Where we drew
+        img[mask] = cv2.addWeighted(overlay, alpha, img, 1-alpha, 0)[mask]
+
+        # Create transparent window
+        cv2.namedWindow("chess_arrow", cv2.WINDOW_GUI_NORMAL)
+        cv2.setWindowProperty("chess_arrow", cv2.WND_PROP_TOPMOST, 1)
+        cv2.setWindowProperty("chess_arrow", cv2.WND_PROP_FULLSCREEN, 1)
+        cv2.imshow("chess_arrow", cv2.cvtColor(img, cv2.COLOR_BGRA2BGR))
+        cv2.waitKey(800)
+
     finally:
         cv2.destroyAllWindows()
 
