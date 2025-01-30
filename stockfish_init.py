@@ -14,12 +14,40 @@ class ChessEngine:
     def _initialize_stockfish(self, path):
         stockfish = Stockfish(path)
         stockfish.update_engine_parameters({
+
             "Threads": 16,
+            # The number of threads (processor cores) that the engine will use.
+            # Don't use all threads or it will quickly crash
+
             "Hash": 2048,
-            "MultiPV": 3,
+            # The size of the hash table in megabytes. Don't set it very high. 2048 will do
+
+            "MultiPV": 1,
+            # Determines how many best moves the engine will show in the analysis.
+            # This always should be set to 1, because engine always plays for best result
+
             "Skill Level": 20,
-            "Move Overhead": 10000000,
+            # The engine's level of play. The higher the value, the stronger the play.
+            # 0 - weak, 20 - super strong
+
+            "Move Overhead": 10,
+            # The time (in milliseconds) that the engine leaves for processing before making a move.
+
             "UCI_LimitStrength": False,
+            # Limits the strength of the engine to a given Elo level. False to make it strong
+
+            "Ponder": True,
+            # whether the engine will analyse during the opponent's move. (AKA Predicting)
+
+            "Contempt": 10,
+            # Determines how much the engine prefers a draw over the risk of defeat.
+            # (Higher value = more aggressive, negative value = plays for a draw. Zero = plays neutral)
+            # Max and min values are: 10, -10
+
+            "Slow Mover": 100,
+            # Controls the engine's thinking speed in proportion to the available time.
+            # Should be based around the given time, but 100 will do for every type of game
+
         })
         print(f"playing with this parameters: {stockfish.get_parameters()}")
         return stockfish
