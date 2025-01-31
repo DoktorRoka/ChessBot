@@ -152,25 +152,18 @@ def get_mouse_coords():
 
 
 def can_castle(fen):
-    fen_parts = fen.split('/')
+    board = fen.split()[0]
+    fen_ranks = board.split('/')
 
-    rook_positions = fen_parts[-1]
+    castling = []
 
-    castling = ''
+    white_rank = lengthenFEN(fen_ranks[-1]).ljust(8)[:8]
+    if white_rank[0] == 'R': castling.append('Q')
+    if white_rank[7] == 'R': castling.append('K')
 
-    if rook_positions.startswith('R'):  # I am not sure that this thing prioritizes castling at queen side
-        castling += 'Q'
+    black_rank = lengthenFEN(fen_ranks[0]).ljust(8)[:8]
+    if black_rank[0] == 'r': castling.append('q')
+    if black_rank[7] == 'r': castling.append('k')
 
-    if rook_positions.endswith('R'):
-        castling += 'K'
+    return ''.join(castling) if castling else '-'
 
-    rook_positions = fen_parts[0]
-    if rook_positions.startswith('r'):
-        castling += 'q'
-    if rook_positions.endswith('r'):
-        castling += 'k'
-
-    if castling == '':
-        castling = '-'
-
-    return castling
