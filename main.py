@@ -93,7 +93,7 @@ def draw_arrow(start, end):
             listener.stop()
             root.destroy()
 
-    def on_click(pressed):
+    def on_click(x, y, button, pressed):
         if pressed:
             root.after(0, close_window)
 
