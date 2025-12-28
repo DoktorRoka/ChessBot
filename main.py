@@ -8,7 +8,7 @@ from training.fen_generator import start_detection, ChessboardPredictor
 from stockfish_init import ChessEngine
 from training.helper_functions import get_mouse_coords
 
-engine = ChessEngine("./stockfish/stockfish-windows-x86-64-avx2.exe")
+engine = ChessEngine("./misc/stockfish_download/stockfish/stockfish-windows-x86-64-avx2.exe")
 
 previous_fen = None
 current_player = 'us'

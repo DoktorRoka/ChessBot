@@ -49,7 +49,7 @@ class ChessEngine:
             # Should be based around the given time, but 100 will do for every type of game
 
         })
-        print(f"playing with this parameters: {stockfish.get_parameters()}")
+        print(f"playing with this parameters: {stockfish.get_engine_parameters()}")
         return stockfish
 
     def is_fen_valid(self, fen):

@@ -29,7 +29,7 @@ def extract_file(filename, directory):
     os.remove(filename)
 
 
-url = 'https://github.com/official-stockfish/Stockfish/releases/download/sf_16/stockfish-windows-x86-64-avx2.zip'
+url = 'https://github.com/official-stockfish/Stockfish/releases/download/sf_17.1/stockfish-windows-x86-64-avx2.zip'
 
 filename = 'downloaded_file.zip'
 directory = 'stockfish_download'
