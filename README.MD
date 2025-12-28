@@ -14,6 +14,7 @@ Short video showcase: https://youtu.be/8K0O75Rlnnk
 ```pip install -r requirements.txt```
 4) Run:
   ```python misc/download_stockfish.py```
+4.1) (if a new version of stockfish came out, you can change the link in download_stockfish.py to newest, and it will still work fine)
 5) Run ```main.py``` and follow the instructions it gives
 
 The ```stockfish_init.py``` file contains necessary functions and settings for interacting with the Stockfish engine.
